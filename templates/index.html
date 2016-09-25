@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 20;
+        padding: 20;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body >
+    <div id="map" style="width:90%; height=500px;"></div>
+    <script>
+/*jQuery(function($) {
+    // Asynchronously Load the map API 
+    var script = document.createElement('script');
+    script.src = "//maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+    document.body.appendChild(script);
+});*/
+
+var map;
+
+function initMap() {
+  
+  var Kiev_center = {lat: 50.45, lng: 30.52};
+  //var map;
+  //var bounds = new google.maps.LatLngBounds();
+  var mapOptions = {
+        zoom: 12,
+        center: new google.maps.LatLng(Kiev_center)
+  };
+  //var myLatlng = new google.maps.LatLng(place.location_lat, place.location_lng);
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  //get_details(map);
+  var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(Kiev_center),
+                title: 'center',
+                map: map
+              });
+  get_details(map);
+};
+
+function get_details(map){
+          console.log("Congrats!I'm in my_function!");
+          //var map;
+          //initMap();
+          $.getJSON('/db_details', {
+            request : "all"
+          }, function(data, map){
+            console.log("Congrats!I'm inside json function!");
+            
+            //{ for place in data.result}
+            var i, marker;
+            //$.each( data['result'], function(i,place,map){ 
+            for(i = 0; i < data['result'].length; i++){
+              var place = data['result'][i];
+              
+              var myLatlng = new google.maps.LatLng(place.location_lat, place.location_lng);
+              console.log("location_lat %s", myLatlng);
+              if (map)
+                console.log("map is Not NULL ");
+              //bounds.extend(myLatlng);
+              
+              console.log("placetitle %s", place.title);
+
+              marker = new google.maps.Marker({
+                position: myLatlng,
+                title: place.title,
+                map: map
+              });
+                //marker.setMap(map);
+            
+              var infoWindow = new google.maps.InfoWindow({
+                maxWidth: 300     
+              });
+
+               google.maps.event.addListener(marker, 'click', (function(marker, myLatlng, map) {
+                return function() {
+                   //placeMarker(myLatlng), map;
+                  infowindow.setContent(myLatlng);
+                  infowindow.open(map, marker);
+                }
+                })(marker));
+            };
+          });   
+        };
+
+  /*function placeMarker(location){
+    var marker = new google.maps.Marker({
+                position: myLatlng,
+                title: place.title,
+                map: map
+            });
+  };*/
+
+
+
+
+    </script>
+
+
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC1GypWJ6A4tUCTPENVNgFpLsSezpalvk&signed_in=true&callback=initMap"></script>
+    <!--jQuery library -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+  </body>
+</html>
