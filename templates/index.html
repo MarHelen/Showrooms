@@ -18,94 +18,87 @@
   <body >
     <div id="map" style="width:90%; height=500px;"></div>
     <script>
-/*jQuery(function($) {
-    // Asynchronously Load the map API 
-    var script = document.createElement('script');
-    script.src = "//maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
-    document.body.appendChild(script);
-});*/
 
-var map;
+    var map;
+    //var bounds = new google.maps.LatLngBounds();
 
-function initMap() {
+    function initMap() {
   
-  var Kiev_center = {lat: 50.45, lng: 30.52};
-  //var map;
-  //var bounds = new google.maps.LatLngBounds();
-  var mapOptions = {
-        zoom: 12,
-        center: new google.maps.LatLng(Kiev_center)
-  };
-  //var myLatlng = new google.maps.LatLng(place.location_lat, place.location_lng);
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-  //get_details(map);
-  var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(Kiev_center),
-                title: 'center',
-                map: map
-              });
-  get_details(map);
-};
+        var Kiev_center = {lat: 50.45, lng: 30.52};
+  
+        var mapOptions = {
+          zoom: 14,
+          mapTypeId: 'roadmap',
+          center: new google.maps.LatLng(Kiev_center)
+        };
+  
+        map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-function get_details(map){
-          console.log("Congrats!I'm in my_function!");
-          //var map;
-          //initMap();
+        get_details("all");
+    };
+</script>
+
+<script>
+
+    function get_details(request){
+
           $.getJSON('/db_details', {
-            request : "all"
-          }, function(data, map){
+            request : request
+          }, function(data){
             console.log("Congrats!I'm inside json function!");
             
-            //{ for place in data.result}
-            var i, marker;
-            //$.each( data['result'], function(i,place,map){ 
-            for(i = 0; i < data['result'].length; i++){
-              var place = data['result'][i];
+            //traversing each place in retrieved from backend list 
+            var i;
+            $.each( data['result'], function(i,place){ 
+            //call for function to set a marker 
+              placeMarker(place);
               
-              var myLatlng = new google.maps.LatLng(place.location_lat, place.location_lng);
-              console.log("location_lat %s", myLatlng);
-              if (map)
-                console.log("map is Not NULL ");
-              //bounds.extend(myLatlng);
-              
-              console.log("placetitle %s", place.title);
-
-              marker = new google.maps.Marker({
-                position: myLatlng,
-                title: place.title,
-                map: map
-              });
-                //marker.setMap(map);
-            
-              var infoWindow = new google.maps.InfoWindow({
-                maxWidth: 300     
-              });
-
-               google.maps.event.addListener(marker, 'click', (function(marker, myLatlng, map) {
-                return function() {
-                   //placeMarker(myLatlng), map;
-                  infowindow.setContent(myLatlng);
-                  infowindow.open(map, marker);
-                }
-                })(marker));
-            };
-          });   
+            });
+          });  
+          //map.fitBounds(bounds); 
         };
 
-  /*function placeMarker(location){
+  function placeMarker(place){
+
+    var position = new google.maps.LatLng(place.location_lat, place.location_lng);
+
+    //set GoogleMaps marker
     var marker = new google.maps.Marker({
-                position: myLatlng,
+                position: position,
                 title: place.title,
                 map: map
             });
-  };*/
 
+    //bounds.extend(position);
 
+    //add info window content
+    var infoWindowContent = 
+        '<div class="info_content">' +
+        '<h3>' + place.title + '</h3>' +
+        '<p>Address:' + place.address + '</p>' + 
+        //'<p>Working hours '+ place.open_hour + ' to ' + place.close_hour '</p>' +
+        '<p><a>' + place.link_fb + '</a></p>' +
+        '<p><a>' + place.link_inst + '</a></p>' +
+        '<p><a>' + place.link_vk +  '</a></p>';
 
+    var infoWindow = new google.maps.InfoWindow();
+    
+    //adding InfoWindow showing by click
+    google.maps.event.addListener(marker, 'click', (function(marker) {
+            return function() {
+                infoWindow.setContent(infoWindowContent);
+                infoWindow.open(map, marker);
+            }
+        })(marker));
+
+  };
+
+  /*var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+        this.setZoom(14);
+        google.maps.event.removeListener(boundsListener);
+    });*/
 
     </script>
-
-
 
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC1GypWJ6A4tUCTPENVNgFpLsSezpalvk&signed_in=true&callback=initMap"></script>
