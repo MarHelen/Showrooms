@@ -3,6 +3,7 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <title>Simple markers</title>
     <style>
       html, body {
@@ -74,13 +75,16 @@
     //add info window content
     var infoWindowContent = 
         '<div class="info_content">' +
+        //title should be an internal link to details page
         '<h3>' + place.title + '</h3>' +
-        '<p>Address:' + place.address + '</p>' + 
-        //'<p>Working hours '+ place.open_hour + ' to ' + place.close_hour '</p>' +
-        '<p><a>' + place.link_fb + '</a></p>' +
-        '<p><a>' + place.link_inst + '</a></p>' +
-        '<p><a>' + place.link_vk +  '</a></p>';
-
+        '<p><b>Address: </b>' + place.address + '</p>' + 
+        '<p><b>Working hours: </b>'+ place.open_h + '-' + place.close_h + '</p>' +
+        //needs to add lenk to showroom own site: db, here
+        //needs to handle case when links is absent
+        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/facebook.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">' +
+        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">' + 
+        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/vk.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">';
+        
     var infoWindow = new google.maps.InfoWindow();
     
     //adding InfoWindow showing by click
@@ -90,6 +94,7 @@
                 infoWindow.open(map, marker);
             }
         })(marker));
+    //add window closing while clickung outside the area
 
   };
 
@@ -106,5 +111,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
     <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
   </body>
 </html>
