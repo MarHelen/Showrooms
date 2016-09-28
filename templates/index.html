@@ -4,7 +4,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>Simple markers</title>
+    <title>Kyiv Showrooms</title>
     <style>
       html, body {
         height: 100%;
@@ -13,11 +13,55 @@
       }
       #map {
         height: 100%;
+        width: 80%;
+        align-items: center;}
+      .masthead {
+         width:100%;
+         height:100%;
+         background-image: url("file://Users/Helen/coding/map_project/static/base.jpg");
+         background-size:cover;
       }
+      .masthead img{
+        width: 100%;
+        height:100%;
+        }
+      
     </style>
   </head>
+
   <body >
-    <div id="map" style="width:90%; height=500px;"></div>
+    <div id="section1" class="container">
+    <div id="mycarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div class="item active">
+        <img src="/static/base.jpg" alt="" class="img-responsive">
+           <div class="carousel-caption">
+           <h1>Welcome to Kyiv Showrooms service! <p><small>This service provides an ability to check a list of the best shoowrooms located in Kyiv city, check their locations and to inform basic details with photos and useful links.</small></p></h1>
+           </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Kyiv Showrooms</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#section1">About</a></li>
+          <li><a href="#map">Map</a></li>
+          <li><a href="#">Showrooms List</a></li>
+          <li><a href="#">Contacts</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+   <div id="map" style="width:90%; height=500px; border:20;"></div>
+   
+  </div>
+
     <script>
 
     var map;
@@ -74,16 +118,16 @@
 
     //add info window content
     var infoWindowContent = 
-        '<div class="info_content">' +
+        '<div class="info_content" class="panel panel-default">' +
         //title should be an internal link to details page
         '<h3>' + place.title + '</h3>' +
         '<p><b>Address: </b>' + place.address + '</p>' + 
         '<p><b>Working hours: </b>'+ place.open_h + '-' + place.close_h + '</p>' +
         //needs to add lenk to showroom own site: db, here
         //needs to handle case when links is absent
-        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/facebook.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">' +
-        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">' + 
-        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/vk.png" alt="HTML tutorial" style="width:42px;height:42px;border:4;">';
+        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/facebook.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' +
+        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' + 
+        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/vk.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">';
         
     var infoWindow = new google.maps.InfoWindow();
     
