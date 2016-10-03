@@ -12,32 +12,57 @@
         padding: 20;
       }
       #map {
-        height: 100%;
-        width: 80%;
-        align-items: center;}
-      .masthead {
-         width:100%;
-         height:100%;
-         background-image: url("file://Users/Helen/coding/map_project/static/base.jpg");
-         background-size:cover;
-      }
-      .masthead img{
+        border: 2px solid #fff;
+        margin-top: 20;
+        /*height: 100%;
         width: 100%;
-        height:100%;
-        }
+        align-items: center;*/}
+      .clickable{
+        cursor: pointer;   
+      }
+
+      .panel-heading span {
+        margin-top: -20px;
+        font-size: 15px;
+      }
       
     </style>
   </head>
 
-  <body >
-    <div id="section1" class="container">
+  <body data-spy="scroll" data-target=".navbar" data-offset="50">
+    
+    <div id="section1" class="container-fluid">
     <div id="mycarousel" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner">
-        <div class="item active">
-        <img src="/static/base.jpg" alt="" class="img-responsive">
-           <div class="carousel-caption">
+      <ol class="carousel-indicators">
+        <li data-target="#mycarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#mycarousel" data-slide-to="1"></li>
+        <li data-target="#mycarousel" data-slide-to="2"></li>
+        <li data-target="#mycarousel" data-slide-to="3"></li>
+        <li data-target="#mycarousel" data-slide-to="4"></li>
+        <li data-target="#mycarousel" data-slide-to="5"></li>
+      </ol>
+
+      <div class="carousel-inner" role="listbox" style="width:100%;height:650px;">
+        <div class="carousel-caption">
            <h1>Welcome to Kyiv Showrooms service! <p><small>This service provides an ability to check a list of the best shoowrooms located in Kyiv city, check their locations and to inform basic details with photos and useful links.</small></p></h1>
-           </div>
+        </div>
+        <div class="item active" >
+          <img src="/static/base.jpg" alt="" class="img-responsive" style="width:100%;">
+        </div>
+        <div class="item">
+          <img src="/static/1.jpg" alt="" class="img-responsive" style="width:100%;">
+        </div>
+        <div class="item">
+          <img src="/static/2.jpg" alt="" class="img-responsive" style="width:100%;">
+        </div>
+        <div class="item">
+          <img src="/static/3.jpg" alt="" class="img-responsive" style="width:100%;">
+        </div>
+        <div class="item">
+          <img src="/static/4.jpg" alt="" class="img-responsive" style="width:100%;">
+        </div>
+        <div class="item">
+          <img src="/static/5.jpg" alt="" class="img-responsive" style="width:100%;">
         </div>
     </div>
     </div>
@@ -50,112 +75,66 @@
           <a class="navbar-brand" href="#">Kyiv Showrooms</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#section1">About</a></li>
-          <li><a href="#map">Map</a></li>
-          <li><a href="#">Showrooms List</a></li>
-          <li><a href="#">Contacts</a></li>
+            <li class="active"><a href="#section1">About</a></li>
+            <li><a href="#map">Map</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Contacts</a></li>
         </ul>
       </div>
     </nav>
     
-   <div id="map" style="width:90%; height=500px; border:20;"></div>
-   
+  <div class ="container-fluid"> 
+  <div class="row">
+  <div class="col-lg-10 col-lg-offset-1">
+    
+    <div class="col-md-4" >
+      <table class="table table-hover" id="map_list">
+      <!--thead>
+      <tr>
+        <th><h3>Place List<h3></th>
+      </tr>
+      </thead-->
+              <tbody><tr>
+              </tr></tbody>
+            </div>
+          
+        </table>
+      </div>
+
+      <div сlass="col-md-6">
+        <div  class="google-map-canvas" id="map"  style="/*width:500px;*/ height:600px; /*border-width:50px;margin: auto;padding-top:2%;max-width: none;"></div>
+    </div>
+     
+     </div>
+     </div>
   </div>
 
-    <script>
 
-    var map;
-    //var bounds = new google.maps.LatLngBounds();
-
-    function initMap() {
-  
-        var Kiev_center = {lat: 50.45, lng: 30.52};
-  
-        var mapOptions = {
-          zoom: 14,
-          mapTypeId: 'roadmap',
-          center: new google.maps.LatLng(Kiev_center)
-        };
-  
-        map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-        get_details("all");
-    };
-</script>
-
-<script>
-
-    function get_details(request){
-
-          $.getJSON('/db_details', {
-            request : request
-          }, function(data){
-            console.log("Congrats!I'm inside json function!");
-            
-            //traversing each place in retrieved from backend list 
-            var i;
-            $.each( data['result'], function(i,place){ 
-            //call for function to set a marker 
-              placeMarker(place);
-              
-            });
-          });  
-          //map.fitBounds(bounds); 
-        };
-
-  function placeMarker(place){
-
-    var position = new google.maps.LatLng(place.location_lat, place.location_lng);
-
-    //set GoogleMaps marker
-    var marker = new google.maps.Marker({
-                position: position,
-                title: place.title,
-                map: map
-            });
-
-    //bounds.extend(position);
-
-    //add info window content
-    var infoWindowContent = 
-        '<div class="info_content" class="panel panel-default">' +
-        //title should be an internal link to details page
-        '<h3>' + place.title + '</h3>' +
-        '<p><b>Address: </b>' + place.address + '</p>' + 
-        '<p><b>Working hours: </b>'+ place.open_h + '-' + place.close_h + '</p>' +
-        //needs to add lenk to showroom own site: db, here
-        //needs to handle case when links is absent
-        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/facebook.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' +
-        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' + 
-        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/vk.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">';
-        
-    var infoWindow = new google.maps.InfoWindow();
+   
     
-    //adding InfoWindow showing by click
-    google.maps.event.addListener(marker, 'click', (function(marker) {
-            return function() {
-                infoWindow.setContent(infoWindowContent);
-                infoWindow.open(map, marker);
-            }
-        })(marker));
-    //add window closing while clickung outside the area
-
-  };
-
-  /*var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
-        this.setZoom(14);
-        google.maps.event.removeListener(boundsListener);
-    });*/
-
-    </script>
-
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC1GypWJ6A4tUCTPENVNgFpLsSezpalvk&signed_in=true&callback=initMap"></script>
     <!--jQuery library -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src='/static/js/main.js'></script>
+    <script>
+    $(document).on('click', '.panel-heading span.clickable', function(e){
+    var $this = $(this);
+  if(!$this.hasClass('panel-collapsed')) {
+    $this.parents('.panel').find('.panel-body').slideUp();
+    $this.addClass('panel-collapsed');
+    $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+  } else {
+    $this.parents('.panel').find('.panel-body').slideDown();
+    $this.removeClass('panel-collapsed');
+    $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+  }
+})
+
+</script>
 
     <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
   </body>
 </html>
