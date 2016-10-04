@@ -8,7 +8,7 @@
         var Kiev_center = {lat: 50.45, lng: 30.52};
   
         var mapOptions = {
-          zoom: 14,
+          zoom: 13,
           mapTypeId: 'roadmap',
           center: new google.maps.LatLng(Kiev_center)
         };
@@ -30,7 +30,7 @@
             var i;
             $.each( data['result'], function(i,place){ 
             //call for function to set a marker 
-            if (place.location_lat)
+            if (place.address)
               placeMarker(place);
             //call for function to extend place table
             build_list(place);
@@ -41,11 +41,11 @@
 
   function placeMarker(place){
 
-    var position = new google.maps.LatLng(place.location_lat, place.location_lng);
+    //var position = new google.maps.LatLng(place.location_lat,place.location_lng);
 
     //set GoogleMaps marker
     var marker = new google.maps.Marker({
-                position: position,
+                position: new google.maps.LatLng(place.location_lat,place.location_lng),
                 title: place.title,
                 map: map
     });
@@ -61,9 +61,9 @@
         '<p><b>Working hours: </b>'+ place.open_h + '-' + place.close_h + '</p>' +
         //needs to add lenk to showroom own site: db, here
         //needs to handle case when links is absent
-        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' +
-        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' + 
-        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/vk.png" alt="HTML tutorial" style="width:42px;height:42px;border:10;">';
+        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' +
+        '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.jpg" alt="HTML tutorial" style="width:42px;height:42px;border:10;">' + 
+        '<a href='+ place.link_vk + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:42px;height:42px;border:10;">';
         
     var infoWindow = new google.maps.InfoWindow();
     
@@ -78,18 +78,56 @@
 
   };
 
+
+//async func for geocoding, might be used while saving data to db
+  function geocode_address(callback){
+    var geocoder = new google.maps.Geocoder();
+    //var position;
+      geocoder.geocode({'address': address}, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        position = results[0].geometry.location;      
+        console.log('Geocode result is OK for' + address);
+        console.log('position is ' + position);
+        //return position;
+        //callback()
+      } else {
+        console.log('Geocode was not successful for %s for the following reason: %s', place.title, status);
+        //return position;
+        }
+  });
+      //return position;
+      
+};
+
+
   function build_list(place){
     //map_list content building
-    var Content = '<tr><td><div class = "panel panel-default"><div class = "panel-heading">'+
-    '<h4 class = "panel-title">'+place.title +'<h4><span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-down"></i></span>'+
-    '<div class="panel-body">'
-                  '<p>'+ place.pourpose_type+'</p>'+
-                  '<p><strong>Address: <strong>'+ place.address + '</p>'+
-                  '<p><strong>Working hours: <strong>'+ place.open_h + '-' + place.close_h +
-                  '</p></div></div></div></td></tr>';
+    var Content = '<tr><td><div class = "panel panel-default"><div class = "panel-heading" >'+
+    '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
+    '<div class="panel-collapsed"><div class="panel-body" '+
+                  '<i>'+ place.pourpose_type+'</i>';
+
+    if (place.address) {
+      Content += '<p>Address: '+ place.address + '</p>'+
+                  '<p>Working hours: '+ place.open_h + '-' + place.close_h; }
+    Content += '<p><a href="#">details...</a></p>' +
+               '</p></div></div></div></td></tr>';
     //adding new record to the table
     $('#map_list tr:last').after(Content);
   };
+
+  $(document).on('click', '.panel-heading span.clickable', function(e){
+    var $this = $(this);
+  if(!$this.hasClass('panel-collapsed')) {
+    $this.parents('.panel').find('.panel-body').slideUp();
+    $this.addClass('panel-collapsed');
+    $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+  } else {
+    $this.parents('.panel').find('.panel-body').slideDown();
+    $this.removeClass('panel-collapsed');
+    $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+  }
+})
 
 
 
