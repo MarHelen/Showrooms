@@ -102,16 +102,18 @@
 
   function build_list(place){
     //map_list content building
-    var Content = '<tr><td><div class = "panel panel-default"><div class = "panel-heading" >'+
-    '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
-    '<div class="panel-collapsed"><div class="panel-body" '+
-                  '<i>'+ place.pourpose_type+'</i>';
+    var Content = '<tr style="margin-bottom:0%; padding-bottom:0%;"><td style="padding-bottom:0px; margin-bottom:0%;"><div class = "panel panel-default" ><div class = "panel-heading" >'+
+    '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
+    '<div class="panel-body" '+
+                  '<i style="display: none"><p class="small">'+ place.pourpose_type+'</p></i>';
 
+    //check if a brand has showroom and add the address if it has
     if (place.address) {
-      Content += '<p>Address: '+ place.address + '</p>'+
-                  '<p>Working hours: '+ place.open_h + '-' + place.close_h; }
-    Content += '<p><a href="#">details...</a></p>' +
-               '</p></div></div></div></td></tr>';
+      Content += '<p class ="small"><strong>Address: </strong>'+ place.address + '</p>'+
+                  '<p class ="small"><strong>Working hours: </strong>'+ place.open_h + '-' + place.close_h; + '</p>';}
+    Content += '<p class ="small"><a href="#">details...</a></p>' +
+               '</div></div></td></tr>';
+
     //adding new record to the table
     $('#map_list tr:last').after(Content);
   };
