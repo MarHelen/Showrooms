@@ -78,7 +78,7 @@ class Showroom(db.Model):
            'close_h'       : self.close_hour,
            'link_fb'       : self.link_fb,
            'link_inst'     : self.link_inst,
-           'link_vk'       : self.link_vk,
+           'link_site'     : self.link_vk,
            'placeId'       : self.placeId
        }
 

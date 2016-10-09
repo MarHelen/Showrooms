@@ -16,3 +16,7 @@ http://prntscr.com/cqpbtx
 
 http://prntscr.com/critvj
 http://prntscr.com/criu0k
+
+map styles added
+http://prntscr.com/crtw0m
+http://prntscr.com/crtwej

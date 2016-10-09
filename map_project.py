@@ -31,6 +31,13 @@ def get_places(request="all"):
 	#	result.append(place.serialize())
 	#return jsonify(result = result)
 	return jsonify(result=[i.serialize for i in Showroom.query.all()])
+ 
+
+#@app.route('/<place.placeId>')
+#def details(place):
+#	return render_template(details.html, place=place)
+#	#return(HTML_TEMPLATE.substitute(place_name=place_name))
+
 
 if __name__ == "__main__":
 	db.create_all()
