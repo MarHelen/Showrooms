@@ -13,3 +13,6 @@ http://prntscr.com/cpw577
 http://prntscr.com/cqp4bm
 http://prntscr.com/cqp4vw
 http://prntscr.com/cqpbtx
+
+http://prntscr.com/critvj
+http://prntscr.com/criu0k

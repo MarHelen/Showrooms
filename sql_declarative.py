@@ -60,6 +60,9 @@ class Showroom(db.Model):
         self.link_vk = vk
         self.placeId = placeid
 
+    def get_placeID(self):
+        pos = self.link_fb.find('com')
+        return self.link_fb[pos+4]
 
     @property
     def serialize(self):
@@ -78,6 +81,7 @@ class Showroom(db.Model):
            'link_vk'       : self.link_vk,
            'placeId'       : self.placeId
        }
+
 
 def init_db():
     Base.metadata.create_all(bind=engine)

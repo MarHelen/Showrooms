@@ -4,6 +4,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'  type='text/css'>
     <title>Kyiv Showrooms</title>
     <style>
       html, body {
@@ -14,6 +15,7 @@
       #map {
         border: 2px solid #fff;
         margin-top: 20;
+        margin-bottom: : 20;
         /*height: 100%;
         width: 100%;
         align-items: center;*/}
@@ -24,6 +26,12 @@
       .panel-heading span {
         margin-top: -20px;
         font-size: 15px;
+      }
+
+      .well {
+        opacity:0.85;
+        color: grey;
+        margin: right;
       }
       
     </style>
@@ -42,11 +50,11 @@
         <li data-target="#mycarousel" data-slide-to="5"></li>
       </ol>
 
-      <div class="carousel-inner" role="listbox" style="width:100%;height:650px;">
+      <div class="carousel-inner" role="listbox" style="width:100%;height:700px; no-repeat left center; background-size: cover;">
         <div class="carousel-caption" >
-           <h1>Welcome to Kyiv Showrooms service! <p><small >This service provides an ability to check a list of the best shoowrooms located in Kyiv city, check their locations and to inform basic details with photos and useful links.</small></p></h1>
+           <h1 style="font-family: 'Lobster';">Welcome to Kyiv Showrooms service! </h1><p class="lead well"><small>This service provides a map with the best domestic brands and showrooms located in Kyiv city. All the listed shops were personaly tested and approved by the author. The idea was to gather all brands addresses, details and useful links in one place to make true Kiev shopper's life easier. Enjoy! </small></p>
         </div>
-        <div class="item active" >
+        <div class="item active">
           <img src="/static/base.jpg" alt="" class="img-responsive" style="width:100%;">
         </div>
         <div class="item">
@@ -69,36 +77,43 @@
     </div>
 
 
-    <nav class="navbar navbar-default navbar-fixed-top" style="background: transparent; border: none; color: black;">
+    <nav class="navbar navbar-default navbar-fixed-top" style="/*background: transparent;*/ border: none; color: black;">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#" style="color:black;">Kyiv Showrooms</a>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span> 
+          </button>
+          <a class="navbar-brand" href="#" style="color:black; font-family: 'Lobster';">Kyiv Showrooms</a>
         </div>
-        <ul class="nav navbar-nav">
-            <li class="active"><a href="#section1">About</a></li>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li class="active" ><a href="#section1">About</a></li>
             <li><a href="#map">Map</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Contacts</a></li>
-        </ul>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#footer">Contacts</a></li>
+          </ul>
+        </div>
       </div>
     </nav>
     
   <div class="container-fluid" >
     <div class="row">
     <div class="col-lg-12">
-    <table><td><tr style="hight:100px; width: 100%; background-color: black;"></tr></td></table>
+    <table><td><tr style="hight:100px; width: 100%; background-color: black; margin-top: 650px;"></tr></td></table>
     </div>
   </div>
   </div>
 
 
-  <div class ="container-fluid" style="height:650px; overflow-y: scroll; margin-top:2%;"> 
-  <div class="row" style="height:650px; overflow-y: scroll;">
-  <div class="col-lg-10 col-lg-offset-1" style="height:650px; overflow-y: scroll;">
+  <div class ="container-fluid" style="height:650px; overflow-y: scroll; margin-top:2%; margin-bottom: 2%;"> 
+  <div class="row">
+  <div class="col-lg-10 col-lg-offset-1" >
     
-    <div class="col-md-4" style="height:650px; overflow-y: scroll;">
-      <table class="table table-hover" id="map_list" style="height:650px; overflow: scroll;">
+    <div class="col-md-4" style="max-height:650px; overflow-y: scroll;">
+      <table class="table table-hover" id="map_list" style="/*height:650px;*/ overflow: scroll; border:none;">
       <!--thead>
       <tr>
         <th><h3>Place List<h3></th>
@@ -112,13 +127,36 @@
       </div>
 
       <div сlass="col-md-6">
-        <div  class="google-map-canvas" id="map"  style="/*width:500px;*/ height:650px; /*border-width:50px;margin: auto;padding-top:2%;max-width: none;"></div>
+        <div  class="google-map-canvas" id="map"  style=" height:650px; border-width:10px; /*margin: auto;padding-top:2%;max-width: none;"></div>
     </div>
      
      </div>
      </div>
   </div>
 
+  <footer>
+  <div id="footer" style="border: 2px solid #fff; margin-top: 20;" class="well">
+    <div class="row">
+      <div class="container">
+        <div class="media">
+          <div class="media-left">
+           <img src="https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/14192717_10209846792982790_441032439889185099_n.jpg?oh=6a5fb8993010b922951eee7da81d9cf5&oe=5866F9A6" class="media-object" style="width:60px; margin-top: 2px; padding-top: 2px;">
+          </div>
+          <div class="media-body">
+            <h6 class="media-heading">Hi!</h6>
+             <p><small>I'm Olena Marushchenko newbie developer and author of this small fasion assistant. Be free to contact me if you have any questions or suggestions.
+             Have incredible shopping!</small></p>
+             <a href="https://www.facebook.com/helen.maruschenko"><img src="/static/fb.jpg" style="width:21px;height:21px;border:10;"></a>
+        <a href="mailto:markohelen@gmail.com"><img src="/static/mail.png" style="width:21px;height:21px;border:10;"></a>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 10px; margin-bottom: 10px;">
+          <p>© 2016 Olena Marushchenko</p>
+        </div> 
+      </div>
+    </div>
+  </div>
+  </footer>
 
    
     
