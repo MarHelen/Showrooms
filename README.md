@@ -20,3 +20,6 @@ http://prntscr.com/criu0k
 map styles added
 http://prntscr.com/crtw0m
 http://prntscr.com/crtwej
+
+added fb sdk, details page
+http://prntscr.com/cs9kwy
