@@ -1,9 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from map_project import db
+#from map_project import db
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+#app.config.from_pyfile('config.py')
+db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/showroom'
+
+
 
 from sqlalchemy import create_engine, Column, Integer, String
  
@@ -30,7 +34,7 @@ class Showroom(db.Model):
     #showroom description field
     title = db.Column('title',db.String(60))
     description = db.Column('description', db.String)
-    pourpose_type = db.Column('pourpose_type', db.String(15)) #choise from 'mixed', 'men' 'women' 'children', 'decor/design'
+    pourpose_type = db.Column('pourpose_type', db.String(60)) #choise from 'mixed', 'men' 'women' 'children', 'decor/design'
     #location block
     address = db.Column('address', db.String(100))
     location_lat = db.Column(db.Float)

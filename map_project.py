@@ -3,10 +3,7 @@ from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, template_folder="templates")
-db = SQLAlchemy(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/showroom'
-
-from sql_declarative import Showroom
+from sql_declarative import db, Showroom
 """app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,7 +37,8 @@ def details(showroom_id):
 	#search for showroom db record with specified id, choose the last
 	item = Showroom.query.filter(Showroom.placeId == showroom_id).first()
 	#calling for serialization method
-	item = item.serialize
+        if (item):
+            item = item.serialize
 
 	return render_template('details.html', place=item)
 
@@ -48,4 +46,4 @@ def details(showroom_id):
 if __name__ == "__main__":
 	db.create_all()
 	db.session.commit()
-	app.run(debug=True)
+	app.run(host='0.0.0.0', debug=True)
