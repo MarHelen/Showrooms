@@ -24,7 +24,7 @@
         map.mapTypes.set('map_style', styledMap);
         map.setMapTypeId('map_style');
 
-        get_details("all");
+        
     };
 
 
