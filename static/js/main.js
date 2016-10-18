@@ -2,11 +2,12 @@
 
     var map;
     var markers = [];
+    var Kiev_center = {lat: 50.45, lng: 30.52};
     //var bounds = new google.maps.LatLngBounds();
 
     function initMap() {
   
-        var Kiev_center = {lat: 50.45, lng: 30.52};
+        
 
         var styledMap = new google.maps.StyledMapType(stylesArray_2, {name: "Styled Map"});
   
@@ -23,9 +24,15 @@
         //Associate the styled map with the MapTypeId and set it to display.
         map.mapTypes.set('map_style', styledMap);
         map.setMapTypeId('map_style');
-
+        
+        $(window).resize(function() {
+    // (the 'map' here is the result of the created 'var map = ...' above)
+          google.maps.event.trigger(map, "resize");
+        });
         
     };
+
+    
 
 
     function get_details(request){
@@ -169,7 +176,8 @@
     $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
 
     //getting a number of appropriate marker
-    var panel_id = $this.parent('.panel').attr('id');
+    var panel_id = $this.parents('.panel').find('.panel-default').attr('id');
+    //var panel_id = $this.parent('.panel').attr('id');
     console.log('marker index is ' + panel_id);
     //var pos = panel_id.indexOf("-");
     var index = Number(panel_id);
@@ -178,6 +186,53 @@
     marker.setAnimation(google.maps.Animation.BOUNCE);
   }
 })
+
+
+  $(document).on('click', 'div span.clickable', function(e){
+      var $this = $(this);
+      var temp = $this.parents('div').find('.wrapper');
+      var temp2 = $this.parents('.div').find('.map');
+      var t_body = temp.parents('.table').find('tbody .content');
+      if (temp.hasClass('collapsed') ){
+        //resize list div
+        temp.removeClass('col-md-1');
+        temp.removeClass('col-sm-1');
+        temp.addClass('col-md-5');
+        temp.addClass('col-sm-5');
+        
+        temp.removeClass('hidden');
+        temp.removeClass('collapsed');
+        //resize map div
+        temp2.removeClass('col-md-9');
+        temp2.removeClass('col-sm-9');
+        temp2.addClass('col-md-5');
+        temp2.addClass('col-sm-5');
+        //resize and recenter google map object
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(Kiev_center);
+        //var div_map = temp2.parents('div').find('.google-map-canvas');
+        
+      } else {
+        //resize list div
+        temp.removeClass('col-md-5');
+        temp.removeClass('col-sm-5');
+        temp.addClass('col-md-1');
+        temp.addClass('col-sm-1');
+        
+        temp.addClass('hidden');
+        temp.addClass('collapsed');
+        //resize map div
+        temp2.removeClass('col-md-5');
+        temp2.removeClass('col-sm-5');
+        temp2.addClass('col-md-9');
+        temp2.addClass('col-sm-9');
+        //resize and recenter google map object
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(Kiev_center);
+        //var div_map = temp2.parents('div').find('.google-map-canvas');
+        
+      }
+    });
 
 
 var stylesArray = [

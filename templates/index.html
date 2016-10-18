@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet'  type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <!--link rel="icon" src="/static/page_icon.png"-->
     <title>Kyiv Showrooms</title>
     <style>
@@ -107,21 +108,24 @@
   <div class="row">
   <div class="col-md-10 col-md-offset-1" >
     
-    <div class="col-md-5 col-sm-5" style="max-height:650px; overflow-y: scroll;">
+    <div class="col-md-5 col-sm-5 list-panel wrapper" id="wrapper" style="max-height:650px; overflow-y: scroll;">
       <table class="table table-hover" id="map_list" style="/*height:650px;*/ overflow: scroll; border:none;">
         <thead>
           <tr>
-            <a data-toggle="sidebar" class="navbar-brand" href="#"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="content">
           <tr style="/*height:0%;*/">
           </tr>
         </tbody>
       </table>
     </div>
 
-    <div сlass="col-md-6 col-sm-6">
+    <div class="col-md-1 col-sm-1" style="width: 20px;">
+      <span class=" clickable pull-right" aria-hidden="false"  ><i  class="glyphicon clickable glyphicon-menu-hamburger" ></i></span>
+    </div>
+
+    <div сlass="col-md-5 col-sm-5 map">
       <div  class="google-map-canvas" id="map"  style=" height:650px; border-width:10px; /*margin: auto;padding-top:2%;max-width: none;"></div>
     </div>
      
@@ -158,7 +162,7 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC1GypWJ6A4tUCTPENVNgFpLsSezpalvk&callback=initMap"></script>
     <!--jQuery library -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    
         <script src='/static/js/main.js'></script>
     <script>window.jQuery || document.write('<script src="{{url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
