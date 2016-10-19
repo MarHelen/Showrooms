@@ -87,9 +87,8 @@
         '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>' +
         '<div class="media-body"><h5 class="media-heading">' + place.title + '</h5>' +
         '<p><b>Address: </b>' + place.address + '</p>';
-        //'<p><b>Working hours: </b>'+ place.open_h + '-' + place.close_h + '</p>';
-        //needs to add lenk to showroom own site: db, here
-        //needs to handle case when links is absent
+        //needs to add link to showroom own site: db, here
+ 
         if (place.link_fb){
           infoWindowContent +=
         '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-right:2px;">';
@@ -102,6 +101,9 @@
           infoWindowContent +=
           '<a href='+ place.link_site + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px;"></div></div></div>';
         }
+        //adding details link
+        infoWindowContent += '<p class ="small"><a href="/' + place.placeId + '">details...</a></p>' +
+                           '</div></div></div></td></tr>';
 
     var infoWindow = new google.maps.InfoWindow();
     
@@ -143,10 +145,10 @@
   function build_list(place, i){
     //map_list content building
     var Content = '<tr style="margin-bottom:0%; padding-bottom:0%;"><td style="padding-bottom:0px; margin-bottom:0%;">'+ 
-    '<div class = "panel panel-default" id="'+ i + '"><div class = "panel-heading" >'+
+    '<div class = "panel panel-default" id="'+ i + '"><div class = "panel-heading clickable" >'+
     '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
-    '<div class="panel-body" '+
-    '<div class="media" style="display: none"><div class="media-left media-middle">' +
+    '<div class="panel-body" style="display: none" >'+
+    '<div class="media"><div class="media-left media-middle">' +
     '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>'
     '<div class="media-body"><h5 class="media-heading"></h5><p class="small">'+ place.pourpose_type+'</p>';
 
@@ -163,7 +165,7 @@
 
 
 
-  $(document).on('click', '.panel-heading span.clickable', function(e){
+  $(document).on('click', 'div .clickable', function(e){
     var $this = $(this);
   if(!$this.hasClass('panel-collapsed')) {
     $this.parents('.panel').find('.panel-body').slideUp();
@@ -176,19 +178,18 @@
     $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
 
     //getting a number of appropriate marker
-    var panel_id = $this.parents('.panel').find('.panel-default').attr('id');
-    //var panel_id = $this.parent('.panel').attr('id');
-    console.log('marker index is ' + panel_id);
-    //var pos = panel_id.indexOf("-");
+    var panel_id = $this.parents('.panel').attr('id');
     var index = Number(panel_id);
-    console.log('marker index is ' + index);
     var marker = markers[index];
+
+    //set marker animation for one "jump cycle"
     marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function(){ marker.setAnimation(null); }, 750);
   }
 })
 
 
-  $(document).on('click', 'div span.clickable', function(e){
+  $(document).on('click', 'div span.click', function(e){
       var $this = $(this);
       var temp = $this.parents('div').find('.wrapper');
       var temp2 = $this.parents('.div').find('.map');
