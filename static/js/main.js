@@ -7,8 +7,6 @@
 
     function initMap() {
   
-        
-
         var styledMap = new google.maps.StyledMapType(stylesArray_2, {name: "Styled Map"});
   
         var mapOptions = {
@@ -16,7 +14,7 @@
           mapTypeId: 'roadmap',
           center: new google.maps.LatLng(Kiev_center),
           mapTypeControlOptions: { mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
-    }
+          }
         };
   
         map = new google.maps.Map(document.getElementById('map'), mapOptions);
@@ -30,9 +28,6 @@
           google.maps.event.trigger(map, "resize");
         });
 
-        /*google.maps.event.addListener(map, "click", function(event) {
-          infowindow.close();
-        });*/
         
     };
 
