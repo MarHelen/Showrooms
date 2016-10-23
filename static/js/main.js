@@ -29,6 +29,10 @@
     // (the 'map' here is the result of the created 'var map = ...' above)
           google.maps.event.trigger(map, "resize");
         });
+
+        /*google.maps.event.addListener(map, "click", function(event) {
+          infowindow.close();
+        });*/
         
     };
 
@@ -49,6 +53,7 @@
             //call for function to set a marker 
             if (place.address)
               placeMarker(place, i);
+            else markers.push(-1);
             //call for function to extend place table
             build_list(place, i);
             });
@@ -80,30 +85,8 @@
     //bounds.extend(position);
 
     //add info window content
-    var infoWindowContent = 
-        '<div class="info_content" style="max-width:400px;">' +
-        //title should be an internal link to details page
-        '<div class="media"><div class="media-left media-middle">'+
-        '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>' +
-        '<div class="media-body"><h5 class="media-heading">' + place.title + '</h5>' +
-        '<p><b>Address: </b>' + place.address + '</p>';
-        //needs to add link to showroom own site: db, here
- 
-        if (place.link_fb){
-          infoWindowContent +=
-        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-right:2px;">';
-        }
-        if (place.link_inst){
-          infoWindowContent +=
-          '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:21px;height:21px;border:5px;margin-right:2px;">';
-        }
-        if (place.link_vk){
-          infoWindowContent +=
-          '<a href='+ place.link_site + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px;"></div></div></div>';
-        }
-        //adding details link
-        infoWindowContent += '<p class ="small"><a href="/' + place.placeId + '">details...</a></p>' +
-                           '</div></div></div></td></tr>';
+    var infoWindowContent = '<h5>'+ place.title + '</h5>' + build_media(place);
+        
 
     var infoWindow = new google.maps.InfoWindow();
     
@@ -117,6 +100,10 @@
     //add marker to markers array to make it accessible later
     markers.push(marker);
     //add window closing while clickung outside the area
+
+    google.maps.event.addListener(map, "click", function(event) {
+      infoWindow.close();
+    });
 
   };
 
@@ -145,32 +132,62 @@
   function build_list(place, i){
     //map_list content building
     var Content = '<tr style="margin-bottom:0%; padding-bottom:0%;"><td style="padding-bottom:0px; margin-bottom:0%;">'+ 
-    '<div class = "panel panel-default" id="'+ i + '"><div class = "panel-heading clickable" >'+
+    '<div class = "panel panel-default" id="'+ i + '"><div class = "panel-heading clickable panel-collapsed" id="panel-header">'+
     '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
-    '<div class="panel-body" style="display: none" >'+
-    '<div class="media"><div class="media-left media-middle">' +
-    '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>'
-    '<div class="media-body"><h5 class="media-heading"></h5><p class="small">'+ place.pourpose_type+'</p>';
-
-    //check if a brand has showroom and add the address if it has
-    if (place.address) {
-      Content += '<p class ="small"><strong>Address: </strong>'+ place.address + '</p>'+
-                  '<p class ="small"><strong>Working hours: </strong>'+ place.open_h + '-' + place.close_h; + '</p>';}
-    Content += '<p class ="small"><a href="/' + place.placeId + '">details...</a></p>' +
-               '</div></div></div></td></tr>';
-
+    '<div class="panel-body" style="display: none" >';
+    Content += build_media(place) + '</td></tr>';
+    
     //adding new record to the table
     $('#map_list tr:last').after(Content);
   };
 
+  function build_media(place){
+    var Content = '<div class="info_content" style="max-width:400px;">' +
+        //title should be an internal link to details page
+        '<div class="media"><div class="media-left media-middle">'+
+        '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>' +
+        '<div class="media-body"><h5 class="media-heading"></h5>';
+        Content += '<p class ="small"><i>'+ place.pourpose_type + '</i></p>';
+        if (place.address) {
+          Content += '<p class ="small"><strong>Address: </strong>'+ place.address + '</p>'+
+                     '<p class ="small"><strong>Working hours: </strong>'+ place.open_h + '-' + place.close_h; + '</p>';
+        }
+        
+        // social media block
+        Content += '<div class="media-right" >';
+ 
+        if (place.link_fb){
+          Content +=
+        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-right:2px;">';
+        }
+        if (place.link_inst){
+          Content +=
+          '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:21px;height:21px;border:5px;margin-right:2px;">';
+        }
+        if (place.link_site){
+          Content +=
+          '<a href='+ place.link_site + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px;">';
+        }
+
+        Content += '</div>';
+
+        //adding details link
+        Content += '<p class ="small"><a href="/' + place.placeId + '">details...</a></p>' +
+                           '</div></div></div>';
+    return Content;
+  }
 
 
-  $(document).on('click', 'div .clickable', function(e){
+
+  $(document).on('click', '#panel-header', function(e){
     var $this = $(this);
   if(!$this.hasClass('panel-collapsed')) {
     $this.parents('.panel').find('.panel-body').slideUp();
     $this.addClass('panel-collapsed');
     $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+    //getting a number of appropriate marker
+    var panel_id = $this.parents('.panel').attr('id');
+    marker_animation(panel_id);
 
   } else {
     $this.parents('.panel').find('.panel-body').slideDown();
@@ -179,17 +196,23 @@
 
     //getting a number of appropriate marker
     var panel_id = $this.parents('.panel').attr('id');
-    var index = Number(panel_id);
-    var marker = markers[index];
-
-    //set marker animation for one "jump cycle"
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){ marker.setAnimation(null); }, 750);
+    marker_animation(panel_id);
+    
   }
 })
 
+  function marker_animation(id){
+    var index = Number(id);
+    var marker = markers[index];
+    //set marker animation for one "jump cycle"
+    if (marker != -1){
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function(){ marker.setAnimation(null); }, 750);
+    }
+  }
 
-  $(document).on('click', 'div span.click', function(e){
+
+  $(document).on('click', '#list-collapse', function(e){
       var $this = $(this);
       var temp = $this.parents('div').find('.wrapper');
       var temp2 = $this.parents('.div').find('.map');
