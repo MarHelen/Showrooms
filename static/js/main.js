@@ -3,6 +3,8 @@
     var map;
     var markers = [];
     var Kiev_center = {lat: 50.45, lng: 30.52};
+    var LastinfoWindow;
+    
     //var bounds = new google.maps.LatLngBounds();
 
     function initMap() {
@@ -84,23 +86,41 @@
         
 
     var infoWindow = new google.maps.InfoWindow();
+    infoWindow.setContent(infoWindowContent);
+
     
     //adding InfoWindow showing by click
-    google.maps.event.addListener(marker, 'click', (function(marker) {
-            return function() {
-                infoWindow.setContent(infoWindowContent);
-                infoWindow.open(map, marker);
-            }
-        })(marker));
-    //add marker to markers array to make it accessible later
-    markers.push(marker);
-    //add window closing while clickung outside the area
+    google.maps.event.addListener(marker, 'click', function() {
+      //closed opened infoWindow
+        if (LastinfoWindow){
+            LastinfoWindow.close();}
+      
+      //close current infoWindow if it's opened or place if it isn't
+        if(!marker.open){
+          infoWindow.open(map,marker);
+          marker.open = true;
+          }
+        else{
+          infoWindow.close();
+          marker.open = false;
+          }
 
-    google.maps.event.addListener(map, "click", function(event) {
-      infoWindow.close();
+        LastinfoWindow = infoWindow;
+      
     });
 
+
+    //add marker to markers array to make it accessible later
+    markers.push(marker);
+    
+    //add window closing while clickung outside the area
+    google.maps.event.addListener(map, 'click', function() {
+        infoWindow.close();
+        marker.open = false;
+    });
+    
   };
+
 
 
 //async func for geocoding, might be used while saving data to db
@@ -137,7 +157,7 @@
   };
 
   function build_media(place){
-    var Content = '<div class="info_content" style="max-width:400px;">' +
+    var Content = '<div class="info_content" style="max-width:300px;">' +
         //title should be an internal link to details page
         '<div class="media"><div class="media-left media-middle">'+
         '<img src="//graph.facebook.com/' + place.placeId + '/picture?type=square" class="media-object" style="width:60px"></div>' +
