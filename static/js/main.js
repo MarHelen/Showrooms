@@ -153,15 +153,15 @@
  
         if (place.link_fb){
           Content +=
-        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-right:2px;">';
+        '<a href='+ place.link_fb + ' target="_blank"><img src="/static/fb.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-right:2px; margin-bottom:5px;">';
         }
         if (place.link_inst){
           Content +=
-          '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:21px;height:21px;border:5px;margin-right:2px;">';
+          '<a href='+ place.link_inst + ' target="_blank"><img src="/static/inst.png" alt="HTML tutorial" style="width:21px;height:21px;border:5px;margin-right:2px; margin-bottom:5px;">';
         }
         if (place.link_site){
           Content +=
-          '<a href='+ place.link_site + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px;">';
+          '<a href='+ place.link_site + ' target="_blank"><img src="/static/site.jpg" alt="HTML tutorial" style="width:21px;height:21px;border:5px; margin-bottom:5px;">';
         }
 
         Content += '</div>';
