@@ -104,8 +104,8 @@
 
       <div class="carousel-inner" role="listbox" id="carusel-body" style="width:100%;height:650px; no-repeat left center; background-size: cover;">
 
-        <div class="item active">
-          <img src="//graph.facebook.com/{{ place.placeId }}/picture?type=large" alt="" class="img-responsive" style="width:100%;">
+        <div class="item active" id="carusel_first">
+          <img src="" alt="" class="img-responsive" style="width:100%;">
         </div>
 
       </div>
@@ -153,13 +153,19 @@ FB.api(
   {"fields":"posts.limit(20){instagram_eligibility,full_picture,message,is_popular}", "access_token" : "314614308897367|pd6XzgFTKRFPb7kP_Zzu9v_0wbk"},
   function(response) {
     var posts_object = response["posts"];
-    $.each( posts_object["data"], function(i,post){ 
-    //if (post["instagram_eligibility"] === "eligible"){
-      var Block = '<div class="item"><img src='+ post["full_picture"] +' alt="" class="img-responsive" style="width:100%;"></div>';
-      //'<div class="carousel-caption" ><p class="lead well"><small>'+ post["message"] +'</small></p></div></div>';
-      var carusel = $("#carusel-body");
-      $("#carusel-body div:last").after(Block);
-    //}
+    
+    $.each( posts_object["data"], function(i,post){
+      if (i === 0){
+        var first = $("#carusel_first");
+        first.find('img').attr("src", post["full_picture"]);
+      }
+      else {
+        var Block = '<div class="item"><img src='+ post["full_picture"] +
+                    ' alt="" class="img-responsive" style="width:100%; hight:100%;"></div>';
+        //'<div class="carousel-caption" ><p class="lead well"><small>'+ post["message"] +'</small></p></div></div>';
+        var carusel = $("#carusel-body");
+        $("#carusel-body div:last").after(Block);
+      }
     });
   }
 );
