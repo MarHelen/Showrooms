@@ -8,6 +8,10 @@
 
   var fb_url = '/' + showroom.placeId + '/';
 
+  /*$(window).load(function() {
+    $("#loading_capture").fadeOut("slow");
+   })*/
+
    window.onload=function(){
     
     placeMarker(showroom);
@@ -51,7 +55,7 @@ FB.api(
       }
       else {
         var Block = '<div class="item"><img src='+ post["full_picture"] +
-                    ' alt="" class="img-responsive img-fluid center-block" style="hight:100%; background-position: center center"></div>';
+                    ' alt="" class="img-fluid center-block" style="hight:100%; background-position: center center"></div>';
         //'<div class="carousel-caption" ><p class="lead well"><small>'+ post["message"] +'</small></p></div></div>';
         var carusel = $("#carusel-body");
         $("#carusel-body div:last").after(Block);
@@ -74,20 +78,26 @@ FB.api(
     
     $.each( posts_object["data"], function(i,post){
 
-        var Block = '<div class="clearfix col-sm-5 col-md-4 " id="image"><a href='+ post["link"] +' target="_blank"><img src='+ post["full_picture"] +
-                    ' class="img-responsive img-fluid center-block" style="hight:100%; width:100%; background-position: center center"></a>';
+        //var Block = '<div class="clearfix col-sm-5 col-md-4 " id="image"><a href='+ post["link"] +' target="_blank"><img src='+ post["full_picture"] +
+        //            ' class="img-responsive img-fluid center-block" style="hight:100%; width:100%; background-position: center center"></a>';
+        var Block = '<div class="card" id="image"> <a href='+ post["link"] +' target="_blank"><img class="card-img-top img-fluid" src=' + 
+                    post["full_picture"] +' target="_blank" alt="Card image cap"></a>';
+  
         if (post["message"]){
-          var message;
           var message_len_limit = 100;
           if (post["message"].length > message_len_limit){
-            Block += '<br class="">' + post["message"].slice(0,message_len_limit-1) +
-            '<a href="#" data-toggle="tooltip" data-html="true" data-placement="bottom" title='+ post["message"] + '>...</a></div></div>';
+            //Block += '<br class="">' + post["message"].slice(0,message_len_limit-1) +
+            //'<a href='+ post["link"] +' target="_blank">...</a></div></div>';
+            Block += '<div class="card-block"><p class="card-text">' + post["message"].slice(0,message_len_limit-1) +
+                     '<a href='+ post["link"] +' target="_blank">...</a></div></div>';
           }
           else 
-            Block += '<br class="">'+ post["message"] +'</div></div>';
-
+            //Block += '<br class="">'+ post["message"] +'</div></div>';
+            Block += '<div class="card-block"><p class="card-text">' + post["message"] + '</div></div>';
         }
-        else Block += '<br class=""></div></div>';
+        //else Block += '<br class=""></div></div>';
+        else Block += '</div>';
+
         var gallery = $("#gallery-body");
         if (i === 0){
           $("#gallery-body").prepend(Block);
@@ -97,7 +107,10 @@ FB.api(
         }
       
     });
+    $("#loading_capture").fadeOut("slow");
   }
 );
 });
+
+
 
