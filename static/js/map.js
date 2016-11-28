@@ -13,7 +13,7 @@
         var styledMap = new google.maps.StyledMapType(stylesArray_2, {name: "Styled Map"});
   
         var mapOptions = {
-          zoom: 13,
+          zoom: 12,
           mapTypeId: 'roadmap',
           center: new google.maps.LatLng(Kiev_center),
           mapTypeControlOptions: { mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']

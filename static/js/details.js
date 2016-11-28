@@ -1,16 +1,8 @@
     //Filename: details.js
 
-  //var showroom = 
- 
- /* window.onload=function(place){
-    placeMarker(place);
-};*/
 
   var fb_url = '/' + showroom.placeId + '/';
 
-  /*$(window).load(function() {
-    $("#loading_capture").fadeOut("slow");
-   })*/
 
    window.onload=function(){
     
@@ -65,6 +57,8 @@ FB.api(
 );
 });
 
+var message_len_limit = 100;
+
 $(document).on(
     'fbload',  
     function(){
@@ -78,36 +72,50 @@ FB.api(
     
     $.each( posts_object["data"], function(i,post){
 
-        //var Block = '<div class="clearfix col-sm-5 col-md-4 " id="image"><a href='+ post["link"] +' target="_blank"><img src='+ post["full_picture"] +
-        //            ' class="img-responsive img-fluid center-block" style="hight:100%; width:100%; background-position: center center"></a>';
         var Block = '<div class="card" id="image"> <a href='+ post["link"] +' target="_blank"><img class="card-img-top img-fluid" src=' + 
                     post["full_picture"] +' target="_blank" alt="Card image cap"></a>';
   
         if (post["message"]){
-          var message_len_limit = 100;
+          
           if (post["message"].length > message_len_limit){
-            //Block += '<br class="">' + post["message"].slice(0,message_len_limit-1) +
-            //'<a href='+ post["link"] +' target="_blank">...</a></div></div>';
-            Block += '<div class="card-block"><p class="card-text">' + post["message"].slice(0,message_len_limit-1) +
-                     '<a href='+ post["link"] +' target="_blank">...</a></div></div>';
+
+            Block += //original text
+                     '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
+                      post["message"].slice(0,message_len_limit-1) +
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
+                     '<p><a href="#" class="button small">Show translation</a></p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en hidden"><p class="card-text><a href='+ post["link"] + 
+                     ' target="_blank">...</a></p> <a href="#" class="button small">Show original</a> </div></div>';
+
           }
-          else 
-            //Block += '<br class="">'+ post["message"] +'</div></div>';
-            Block += '<div class="card-block"><p class="card-text">' + post["message"] + '</div></div>';
+          else {
+
+            Block += //original text
+                     '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
+                     '</p><p><a href="#" class="button small">Show translation</a><p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en hidden"><p class="card-text></p>' + 
+                     '<p><a href="#" class="button small">Show original</a></p></div></div> ';
+
+         }
         }
-        //else Block += '<br class=""></div></div>';
+        
         else Block += '</div>';
 
         var gallery = $("#gallery-body");
         if (i === 0){
           $("#gallery-body").prepend(Block);
+          
         }
         else  {
           $("#gallery-body #image:last").after(Block);
         }
-      
+        
     });
     $("#loading_capture").fadeOut("slow");
+    //trigger to start translation
+    $(document).trigger('gallery_load'); 
   }
 );
 });

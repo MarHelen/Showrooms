@@ -49,13 +49,14 @@
 
      #loadding_capture {
         margin: auto;
-        position: fixed;
-        left: 0px;
+        /*position: fixed;
+        left: 0px;*/
         top: 0px;
         width: 100%;
         height: 100%;
         z-index: 9999;
-
+        display: block; position: absolute; left: 100px; 
+  
      }
       
     </style>
@@ -92,7 +93,7 @@
 
 
     <!--Information block -->
-    <div class ="container" id="section0" style="height:500px; overflow-y: scroll; margin-top:100px; margin-bottom: 50px;"> 
+    <div class ="container" id="section0" style="height:500px; overflow-y: scroll; margin-top:100px; margin-bottom: 0px;"> 
     <div class="row">
     <div class="col-md-11 col-md-offset-1" >
     
@@ -125,7 +126,7 @@
 
 
 <!--Carousel block, hidden-->
-<div id="section1" class="container hidden" style="margin-bottom: 50px;margin-top: 50px;height:650px;" hidden>
+<div id="section1" class="container hidden" style="margin-bottom: 50px;margin-top: 100px;height:650px;" hidden>
     <div id="mycarousel" class="carousel slide" data-ride="carousel" style="border-bottom: 20px;">
 
       <div class="carousel-inner" role="listbox" id="carusel-body" style="width:100%;height:650px; margin: auto; background-size: cover;">
@@ -151,9 +152,9 @@
 
 <!--Map block -->
 {% if place.address %}
-<div id="section2" class="container" style="margin-bottom: 50px;margin-top: 50px;height:650px;">
+<div id="section2" class="container" style="margin-bottom: 50px;margin-top: 50px;height:450px;">
   <div сlass="col-md-10 col-sm-10 map">
-      <div  class="google-map-canvas" id="map"  style=" height:650px; border-width:10px;"></div>
+      <div  class="google-map-canvas" id="map"  style=" height:450px; border-width:10px;"></div>
   </div>
 </div>
 {% endif %}
@@ -187,7 +188,8 @@
     'link_site'     : "{{ place.link_site }}",
   };
   </script>
-
+  
+  <!--Google Analitics-->
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -198,6 +200,70 @@
     ga('send', 'pageview');
 
   </script>
+
+  <!--Google Translate API-->
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script type="text/javascript" >
+
+  function start(){
+    $(document).on(
+      'gallery_load', 
+      function(){
+      $(".to_translate").each(function(i, elem) {
+    gapi.client.init({
+    'apiKey': 'AIzaSyDNscXpr1ldtN4LJvsEHAzrN8uGBy9972g',
+    'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/translate/v2/rest'],
+     }).then(function() {
+          var text = elem.textContent || elem.innerText;
+          text = text.slice(0,message_len_limit-1);
+          return gapi.client.language.translations.list({
+            q: text,
+            source: 'ru',
+            target: 'en',
+          });
+        }).then(function(resp) {
+          console.log(resp.result.data.translations[0].translatedText);
+          //var element = elem.nextElementSibling;
+          var element = $(elem).next().filter('.google_translate_en');
+          //$('#navigation ul li').css('display': 'inline-block');
+
+            //to_eng(elem, element);
+            //$(elem).removeClass("to_translate");
+            $(elem).css('display', 'none');
+            $(element).css('display', 'block');
+            $(elem).addClass("hidden");
+            $(element).removeClass("hidden");
+            
+            $(element).find("p").prepend(resp.result.data.translations[0].translatedText);
+        }, function(reason) {
+          console.log('Error: ' + reason.result.error.message);
+        });
+      });
+    });
+  };
+
+
+  gapi.load('client', start);
+  //google.setOnLoadCallback(initialize); 
+
+ function to_eng(elem1, elem2){
+    $(elem1).css('display', 'none');
+    $(elem2).css('display', 'block');
+  }
+
+$('.google_translate_en .button').click(function() {
+    $(this).parent().css('display', 'none');
+    var prev = $(this).parent().prevElementSibling;
+    $(prev).css('display', 'block');
+    /*$("#google_translate_element").innerHTML += '<a href="#" onclick="back_to_en()">'*/
+  });
+  
+  </script>
+  
+  
+
+  <!--script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script-->
+  
 
   <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDC1GypWJ6A4tUCTPENVNgFpLsSezpalvk&callback=initMap"></script>

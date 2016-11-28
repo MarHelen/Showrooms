@@ -40,7 +40,7 @@ def details(showroom_id):
         if (item):
             item = item.serialize
 
-	return render_template('details.html', place=item)
+	return render_template('details.html', place=item) #, fb_key=)
 
 
 if __name__ == "__main__":

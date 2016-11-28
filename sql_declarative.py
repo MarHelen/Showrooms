@@ -34,7 +34,7 @@ class Showroom(db.Model):
     #showroom description field
     title = db.Column('title',db.String(60))
     description = db.Column('description', db.String)
-    pourpose_type = db.Column('pourpose_type', db.String(60)) #choise from 'mixed', 'men' 'women' 'children', 'decor/design'
+    pourpose_type = db.Column('pourpose_type', db.String(200)) #choise from 'mixed', 'men' 'women' 'children', 'decor/design'
     #location block
     address = db.Column('address', db.String(100))
     location_lat = db.Column(db.Float)
