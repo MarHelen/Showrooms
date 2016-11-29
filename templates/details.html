@@ -223,18 +223,17 @@
           });
         }).then(function(resp) {
           console.log(resp.result.data.translations[0].translatedText);
-          //var element = elem.nextElementSibling;
-          var element = $(elem).next().filter('.google_translate_en');
-          //$('#navigation ul li').css('display': 'inline-block');
 
-            //to_eng(elem, element);
-            //$(elem).removeClass("to_translate");
+          var element = $(elem).next().filter('.google_translate_en');
+
             $(elem).css('display', 'none');
             $(element).css('display', 'block');
-            $(elem).addClass("hidden");
-            $(element).removeClass("hidden");
-            
-            $(element).find("p").prepend(resp.result.data.translations[0].translatedText);
+
+            //var p = $(element).find("p.card-text");
+            var p = $(element).find("p.card-text");
+            $(p).prepend(resp.result.data.translations[0].translatedText);
+            //$(elem).find("a:first").clone().appendTo(p);
+            //$('</p>').appendTo(p);
         }, function(reason) {
           console.log('Error: ' + reason.result.error.message);
         });
@@ -244,19 +243,24 @@
 
 
   gapi.load('client', start);
-  //google.setOnLoadCallback(initialize); 
 
- function to_eng(elem1, elem2){
-    $(elem1).css('display', 'none');
-    $(elem2).css('display', 'block');
-  }
 
-$('.google_translate_en .button').click(function() {
-    $(this).parent().css('display', 'none');
-    var prev = $(this).parent().prevElementSibling;
+$(document).on('click', 'a.button_to_original', function(e){  
+
+    $(this).closest("div").css('display', 'none');
+    var prev = $(this).closest("div").prev('.to_translate');
     $(prev).css('display', 'block');
-    /*$("#google_translate_element").innerHTML += '<a href="#" onclick="back_to_en()">'*/
+    return false;
   });
+
+$(document).on('click', 'a.button_to_translation', function(e){  
+
+    $(this).closest("div").css('display', 'none');
+    var next = $(this).closest("div").next('.google_translate_en');
+    $(next).css('display', 'block');
+    return false;
+  });
+
   
   </script>
   

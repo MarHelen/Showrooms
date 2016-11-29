@@ -35,7 +35,7 @@ $(document).on(
 FB.api(
   fb_url,
   'GET',
-  {"fields":"posts.limit(20){instagram_eligibility,full_picture,message,link}", 
+  {"fields":"posts.limit(2){instagram_eligibility,full_picture,message,link}", 
    "access_token" : "314614308897367|pd6XzgFTKRFPb7kP_Zzu9v_0wbk" },
   function(response) {
     var posts_object = response["posts"]; 
@@ -83,20 +83,20 @@ FB.api(
                      '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
                       post["message"].slice(0,message_len_limit-1) +
                      '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
-                     '<p><a href="#" class="button small">Show translation</a></p></div>' +
+                     '<p><a href="#" class="button_to_translatation small">Show translation</a></p></div>' +
                      //translated text, hidden while composing
-                     '<div class="google_translate_en hidden"><p class="card-text><a href='+ post["link"] + 
-                     ' target="_blank">...</a></p> <a href="#" class="button small">Show original</a> </div></div>';
+                     '<div class="google_translate_en" style="display:none"> <p class="card-text"> <a href='+ post["link"] + ' target="_blank">...</a> </p>' +
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p> </div></div>';
 
           }
           else {
 
             Block += //original text
                      '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
-                     '</p><p><a href="#" class="button small">Show translation</a><p></div>' +
+                     '</p><p><a href="#" class="button_to_translatation small">Show translation</a><p></div>' +
                      //translated text, hidden while composing
-                     '<div class="google_translate_en hidden"><p class="card-text></p>' + 
-                     '<p><a href="#" class="button small">Show original</a></p></div></div> ';
+                     '<div class="google_translate_en" style="display:none"><p class="card-text"></p>' + 
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p></div></div> ';
 
          }
         }
