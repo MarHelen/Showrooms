@@ -4,11 +4,10 @@
 
   function build_list(place, i){
     //map_list content building
-    var Content = '<tr style="margin-bottom:0%; padding-bottom:0%;"><td style="padding-bottom:0px; margin-bottom:0%;">'+ 
-    '<div class = "panel panel-default" id="'+ i + '"><div class = "panel-heading clickable panel-collapsed" id="panel-header">'+
-    '<h4 class = "panel-title">'+place.title +'</h4><span class="pull-right clickable panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
-    '<div class="panel-body" style="display: none" >';
-    Content += build_media(place) + '</td></tr>';
+    var Content = '<tr><td><div class = "card" id="'+ i + '"><div class = "card-header clickable panel-collapsed" id="panel-header">'+
+    '<h6 class = "card-header">'+place.title +'</h6><span class="pull-right clickable panel-collapsed" ><i class="glyphicon glyphicon-chevron-down"></i></span></div>'+
+    '<div class="card-block" style="display: none" >';
+    Content += build_media(place) + '</div></div></td></tr>';
     
     //adding new record to the table
     $('#map_list tr:last').after(Content);
@@ -21,20 +20,22 @@
   $(document).on('click', '#panel-header', function(e){
     var $this = $(this);
   if(!$this.hasClass('panel-collapsed')) {
-    $this.parents('.panel').find('.panel-body').slideUp();
+    $this.parents('.card').find('.card-body').slideUp();
     $this.addClass('panel-collapsed');
+    $this.parents('.card').find('.card-block').css('display', 'none');
     $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
     //getting a number of appropriate marker
-    var panel_id = $this.parents('.panel').attr('id');
+    var panel_id = $this.parents('.card').attr('id');
     marker_animation(panel_id);
 
   } else {
-    $this.parents('.panel').find('.panel-body').slideDown();
+    $this.parents('.card').find('.card-body').slideDown();
     $this.removeClass('panel-collapsed');
+    $this.parents('.card').find('.card-block').css('display', 'block');
     $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
 
     //getting a number of appropriate marker
-    var panel_id = $this.parents('.panel').attr('id');
+    var panel_id = $this.parents('.card').attr('id');
     marker_animation(panel_id);
     
   }

@@ -3,7 +3,7 @@
 
     var map;
     var markers = [];
-    var Kiev_center = {lat: 50.45, lng: 30.52};
+    var center = {lat: 50.45, lng: 30.52};
     var LastinfoWindow;
     
     //var bounds = new google.maps.LatLngBounds();
@@ -13,9 +13,9 @@
         var styledMap = new google.maps.StyledMapType(stylesArray_2, {name: "Styled Map"});
   
         var mapOptions = {
-          zoom: 12,
+          zoom: 13,
           mapTypeId: 'roadmap',
-          center: new google.maps.LatLng(Kiev_center),
+          center: new google.maps.LatLng(center),
           mapTypeControlOptions: { mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
           }
         };
@@ -59,8 +59,13 @@
           //map.fitBounds(bounds); 
         };
 
+var place_added_amount = 0;
+
   function placeMarker(place){
     
+    change_center(place.location_lat, place.location_lng);
+
+
     //customizing an icon image to make it compatible for pin
     var image = {
       url: "/static/shop.png",
@@ -78,7 +83,8 @@
                 icon: image
     });
 
-    
+    map.setCenter(new google.maps.LatLng(center));
+
 
     //bounds.extend(position);
 
@@ -109,6 +115,12 @@
         LastinfoWindow = infoWindow;
       
     });
+
+    function change_center(lat, lng){
+    	center.lat = (center.lat * place_added_amount + lat) / (place_added_amount + 1);
+    	center.lng = (center.lng * place_added_amount + lng) / (place_added_amount + 1);
+    	place_added_amount++;
+    }
 
 
     //add marker to markers array to make it accessible later

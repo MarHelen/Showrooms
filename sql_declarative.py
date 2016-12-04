@@ -37,9 +37,10 @@ class Showroom(db.Model):
     pourpose_type = db.Column('pourpose_type', db.String(200)) #choise from 'mixed', 'men' 'women' 'children', 'decor/design'
     #location block
     address = db.Column('address', db.String(100))
+    #address_second = db.Column('address', db.String(100))
     location_lat = db.Column(db.Float)
     location_lng = db.Column(db.Float)
-    #placeID is sufficient identifier for place location, we dont need coordinates any more
+  
     placeId = db.Column('placeId', db.String(450))
     #working hours
     open_hour = db.Column('Open_hours', db.String(15)) #need rework
@@ -50,11 +51,14 @@ class Showroom(db.Model):
     link_inst = db.Column(db.String(100))
     link_vk = db.Column(db.String(100))
 
+    #phone_numbers = db.Column(db.String(100))
+
     def __init__(self, title, text, pourpose, address, lat, lng, open_h, close_h, fb, inst, vk, placeid=None ):
         self.title = title
         self.description = text
         self.pourpose_type = pourpose
         self.address = address
+        #self.address = address_second
         self.location_lat = lat
         self.location_lng = lng
         self.open_hour = open_h
@@ -63,6 +67,7 @@ class Showroom(db.Model):
         self.link_inst = inst
         self.link_vk = vk
         self.placeId = placeid
+        #self.phone_numbers = phone
 
     def get_placeID(self):
         pos = self.link_fb.find('com')
