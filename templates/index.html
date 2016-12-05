@@ -4,6 +4,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
     <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet'  type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
@@ -27,15 +28,29 @@
         cursor: pointer;   
       }
 
-      .panel-heading span {
+      .panel-heading {
         margin-top: -20px;
         font-size: 15px;
+      }
+
+      #panel-header {
+        padding-bottom: 0;
+        padding-top: 0;
       }
 
       .well {
         opacity:0.85;
         color: grey;
         margin: right;
+      }
+      .table-borderless table tbody tr th td tfoot {
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+
+      .list-card {
+        margin-bottom: 0;
       }
       
     </style>
@@ -100,13 +115,13 @@
         </div>
     </nav>
     
- 
+  <!--List Block-->
   <div class ="container" style="height:650px; overflow-y: scroll; margin-top:2%; margin-bottom: 2%;"> 
   <div class="row">
   <div class="col-md-12 col-lg-12 col-sm-12" >
     <!--Table-->
-    <div class="col-md-5 col-sm-5 col-lg-5 list-panel wrapper" id="wrapper" style="max-height:650px; overflow-y: scroll;">
-      <table class="table" id="map_list" style="/*height:650px;*/ overflow: scroll; border:none;">
+    <div class="col-md-5 col-sm-5 col-lg-5 wrapper" id="wrapper" style="max-height:650px; overflow-y: scroll;">
+      <table class="table table-sm table-borderless" id="map_list" style="/*height:650px;*/ overflow: scroll; border:none;">
         <thead>
           <tr>
           </tr>
@@ -118,8 +133,8 @@
       </table>
     </div>
 
-    <div class="col-md-1 col-sm-1 col-lg-1" style="width: 20px;padding-right:0;">
-      <span class=" clickable pull-right" aria-hidden="false"  id="list-collapse"><i  class="glyphicon click glyphicon-menu-hamburger" ></i></span>
+    <div class="col-md-1 col-sm-1 col-lg-1 " style="width: 20px;padding-right:0;">
+      <i  class="clickable pull-right click fa fa-list-ul " id="list-collapse"></i>
     </div>
     
     <!--Map-->
