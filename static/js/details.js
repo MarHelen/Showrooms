@@ -59,7 +59,7 @@ FB.api(
 
 
 
-
+/*
 function start(){
     $(document).on(
       'gallery_load', 
@@ -98,7 +98,7 @@ function start(){
 
 
   gapi.load('client', start);
-
+*/
 
 var message_len_limit = 100;
 /*
@@ -276,6 +276,7 @@ $(document).on('click', 'a.button_to_translation', function(e){
     $(this).closest("div").css('display', 'none');
     //find translation block, make it visible
     var next = $(this).closest("div").next('.google_translate_en');
+    $(next).css('display',null);
     $(next).css('display', 'block');
     return false;
   });
@@ -285,6 +286,7 @@ $(document).on('click', 'a.button_to_original', function(e){
     $(this).closest("div").css('display', 'none');
     //find original block, make it visible
     var prev = $(this).closest("div").prev('.to_translate');
+    $(prev).css('display',null);
     $(prev).css('display', 'block');
     return false;
   });

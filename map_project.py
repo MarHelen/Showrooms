@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__, template_folder="templates")
 from sql_declarative import db, Showroom
 
+from apiclient.discovery import build
+
 #from flask_oauth import OAuth
 
 """app = Flask(__name__)
@@ -48,34 +50,40 @@ class Post:
 @app.route('/<showroom_id>')
 def details(showroom_id):
 	#collecting recent posts from the page facebook
-	#profile = graph.get_object(showroom_id)
-	#shop_details = graph.get_connections(id='/namelishowroom/', connection_name='posts')
+
+
 	posts_json = graph.get_object(id='/'+showroom_id+'/', fields="posts.limit(12){message,link,full_picture}")
-	#posts = json.loads(posts_json).keys()[0]
 	di = []
-	print (posts_json)
+	"""
+    Google translation block
+    """
+	target_language = 'en'
+	service = build('translate','v2',developerKey='AIzaSyDNscXpr1ldtN4LJvsEHAzrN8uGBy9972g')
+	collection = service.translations()
 
 	for post in posts_json[u'posts'][u'data']:
-		print post
+		request = collection.list(q=post[u'message'], target=target_language)
+		response = request.execute()
 		item = {
-		'message'      : post[u'message'],
-		'link'         : post[u'link'].encode('utf-8'),
-		'id'           : post[u'id'].encode('utf-8'),
-		'full_picture' : post[u'full_picture'].encode('utf-8'),
+		'message'       : post[u'message'],
+		'message_trans' : (response['translations'][0])['translatedText'],
+		'link'          : post[u'link'].encode('utf-8'),
+		'id'            : post[u'id'].encode('utf-8'),
+		'full_picture'  : post[u'full_picture'].encode('utf-8'),
 		}
-		#json.dumps(item)
-		#print item
-		#print post[u'message']
+
+		print (response['translations'][0])['translatedText']
+
 		di.append(item)
-	#print di
+
 	#search for showroom db record with specified id, choose the last
 	item = Showroom.query.filter(Showroom.placeId == showroom_id).first()
 	#calling for serialization method
 	if item:
 		item = item.serialize
-    #fb_url = '/' + Showroom.placeId + '/';
-    #posts = graph.get_connections(Showroom.placeId, 'posts.limit(21){message,link}')
-	return render_template('details.html', place=item, posts=map(json.dumps, di) ) #, fb_key=)
+
+
+	return render_template('details.html', place=item, posts=map(json.dumps, di) ) 
 
 
 if __name__ == "__main__":
