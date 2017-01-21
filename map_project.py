@@ -7,7 +7,11 @@ from sql_declarative import db, Showroom
 
 from apiclient.discovery import build
 
-#from flask_oauth import OAuth
+from flask_cache import Cache
+
+cache = Cache(app, config={'CACHE_TYPE': 'redis'})
+
+from config import FB_KEY, GOOGLE_KEY
 
 """app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -16,18 +20,18 @@ db = SQLAlchemy(app)
   """     
 import facebook
 
-#from facebook import GraphAPI, get_connections
-
-graph = facebook.GraphAPI(access_token='314614308897367|pd6XzgFTKRFPb7kP_Zzu9v_0wbk', version="2.7")
+graph = facebook.GraphAPI(access_token=FB_KEY, version="2.7")
 
 
 @app.route("/")
+@cache.cached(timeout=600) # 10 minutes
 def mapview():
 	query = "all"
 	return render_template('index.html' ) 
 
 """building showroom list according to called request""" 
 @app.route("/db_details", methods=["POST","GET"])
+@cache.cached(timeout=600) # 10 minutes
 def get_places(request="all"):
 	if request is None:
 		return []
@@ -39,26 +43,21 @@ def get_places(request="all"):
 	    showroom = NULL
 
 	return jsonify(result=[i.serialize for i in showroom])
- 
-class Post:
-	def __init__(self, message, link):
-		self.message = message
-		self.link = link
 
 
- #rendering a detaills page for called placeId 
+ #rendering a details page for called placeId 
 @app.route('/<showroom_id>')
+@cache.cached(timeout=86400) # 24 h
 def details(showroom_id):
 	#collecting recent posts from the page facebook
 
 
 	posts_json = graph.get_object(id='/'+showroom_id+'/', fields="posts.limit(12){message,link,full_picture}")
 	di = []
-	"""
-    Google translation block
-    """
+
+    #Google translation block
 	target_language = 'en'
-	service = build('translate','v2',developerKey='AIzaSyDNscXpr1ldtN4LJvsEHAzrN8uGBy9972g')
+	service = build('translate','v2',developerKey=GOOGLE_KEY)
 	collection = service.translations()
 
 	for post in posts_json[u'posts'][u'data']:
@@ -79,11 +78,11 @@ def details(showroom_id):
 	#search for showroom db record with specified id, choose the last
 	item = Showroom.query.filter(Showroom.placeId == showroom_id).first()
 	#calling for serialization method
-	if item:
-		item = item.serialize
+	#if item:
+	#	item = item.serialize
 
 
-	return render_template('details.html', place=item, posts=map(json.dumps, di) ) 
+	return render_template('details.html', place=item.serialize, posts=map(json.dumps, di) ) 
 
 
 if __name__ == "__main__":

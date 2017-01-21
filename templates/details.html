@@ -197,8 +197,7 @@
       
       
       for (i in po){
-           
-      //var post = po[i];
+          
       var post = po[i];
       post = JSON.parse(post);
 
@@ -212,10 +211,10 @@
           if (post["message"].length > message_len_limit){
 
             Block += //original text
-                     '<div class="card-block" > <div class="to_translate" style="display:none;"><p class="card-text">' + 
+                     '<div class="card-block" > <div class="to_translate"  style="display:none;"><p class="card-text">' + 
                       post["message"].slice(0,message_len_limit-1) +
                      '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
-                     '<p><a href="#" class="button_to_translatation small clickable">Show translation</a></p></div>' +
+                     '<p><a href="#" class="button_to_translatation small clickable" id="button_to_translatation">Show translation</a></p></div>' +
                      //translated text, hidden while composing
                      '<div class="google_translate_en" style="display:block;"> <p class="card-text">' + post["message_trans"].slice(0,message_len_limit-1) + 
                      '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
