@@ -176,6 +176,8 @@
     'link_inst'     : "{{ place.link_inst }}",
     'link_site'     : "{{ place.link_site }}",
   };
+  var po = {{ posts | safe }};
+
   </script>
   
   <!--Google Analitics-->
@@ -187,6 +189,64 @@
 
       ga('create', 'UA-87589170-1', 'auto');
       ga('send', 'pageview');
+
+  </script>
+
+  <script>
+    $(document).ready (function(){
+      
+      
+      for (i in po){
+           
+      //var post = po[i];
+      var post = po[i];
+      post = JSON.parse(post);
+
+        var Block = '<div class="card" id="image"> <a href='+ post["link"] +' target="_blank"><img class="card-img-top img-fluid" src=' +
+                    post["full_picture"] +' target="_blank" alt="Card image cap"></a>';
+  
+        if ( post["message"] ){
+
+
+          
+          if (post["message"].length > message_len_limit){
+
+            Block += //original text
+                     '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
+                      post["message"].slice(0,message_len_limit-1) +
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
+                     '<p><a href="#" class="button_to_translatation small clickable">Show translation</a></p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"> <p class="card-text"> <a href='+ post["link"] + ' target="_blank">...</a> </p>' +
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p> </div></div>';
+
+         }
+          else {
+
+            Block += //original text
+                     '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
+                     '</p><p><a href="#" class="button_to_translatation small clickable">Show translation</a><p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"><p class="card-text"></p>' + 
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p></div></div> ';
+
+              }
+        }
+        
+        else Block += '</div>';
+
+        var gallery = $("#gallery-body");
+        if (Number(i) === 0){
+          $("#gallery-body").prepend(Block);
+          
+        }
+        else  {
+          $("#gallery-body #image:last").after(Block);
+        }
+
+    };
+    $("#loading_capture").fadeOut("slow");
+});
 
   </script>
 

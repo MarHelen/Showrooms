@@ -29,13 +29,13 @@
 
 //var fb_url = '/{{ place.placeId }}/';
 
-$(document).on(
+/*$(document).on(
     'fbload',  
     function(){
 FB.api(
   fb_url,
   'GET',
-  {"fields":"posts.limit(2){instagram_eligibility,full_picture,message,link}", 
+  {"fields":"posts.limit(21){instagram_eligibility,full_picture,message,link}", 
    "access_token" : "314614308897367|pd6XzgFTKRFPb7kP_Zzu9v_0wbk" },
   function(response) {
     var posts_object = response["posts"]; 
@@ -55,7 +55,9 @@ FB.api(
     });
   }
 );
-});
+});*/
+
+
 
 
 function start(){
@@ -99,8 +101,65 @@ function start(){
 
 
 var message_len_limit = 100;
+/*
+$(document).ready (function(){
+      
+      
+      for (i in po){
+           
+      //var post = po[i];
+      var post = po[i];
+      post = JSON.parse(post);
 
-$(document).on(
+        var Block = '<div class="card" id="image"> <a href='+ post["link"] +' target="_blank"><img class="card-img-top img-fluid" src=' +
+                    post["full_picture"] +' target="_blank" alt="Card image cap"></a>';
+  
+        if ( post["message"] ){
+
+
+          
+          if (post["message"].length > message_len_limit){
+
+            Block += //original text
+                     '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
+                      post["message"].slice(0,message_len_limit-1) +
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
+                     '<p><a href="#" class="button_to_translatation small clickable">Show translation</a></p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"> <p class="card-text"> <a href='+ post["link"] + ' target="_blank">...</a> </p>' +
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p> </div></div>';
+
+         }
+          else {
+
+            Block += //original text
+                     '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
+                     '</p><p><a href="#" class="button_to_translatation small clickable">Show translation</a><p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"><p class="card-text"></p>' + 
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p></div></div> ';
+
+              }
+        }
+        
+        else Block += '</div>';
+
+        var gallery = $("#gallery-body");
+        if (Number(i) === 0){
+          $("#gallery-body").prepend(Block);
+          
+        }
+        else  {
+          $("#gallery-body #image:last").after(Block);
+        }
+
+    };
+
+});
+*/
+
+
+/*$(document).on(
     'fbload',  
     function(){
 FB.api(
@@ -161,8 +220,56 @@ FB.api(
     $(document).trigger('gallery_load'); 
   }
 );
-});
+});*/
 
+/*window.onload=function(){
+$.each( posts, function(i,post){
+
+        var Block = '<div class="card" id="image"> <a href='+ post["link"] +' target="_blank"><img class="card-img-top img-fluid" src=' + 
+                    post["full_picture"] +' target="_blank" alt="Card image cap"></a>';
+  
+        if (post["message"]){
+
+
+          
+          if (post["message"].length > message_len_limit){
+
+            Block += //original text
+                     '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
+                      post["message"].slice(0,message_len_limit-1) +
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
+                     '<p><a href="#" class="button_to_translatation small clickable">Show translation</a></p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"> <p class="card-text"> <a href='+ post["link"] + ' target="_blank">...</a> </p>' +
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p> </div></div>';
+
+          }
+          else {
+
+            Block += //original text
+                     '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
+                     '</p><p><a href="#" class="button_to_translatation small clickable">Show translation</a><p></div>' +
+                     //translated text, hidden while composing
+                     '<div class="google_translate_en" style="display:none"><p class="card-text"></p>' + 
+                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p></div></div> ';
+
+         }
+        }
+        
+        else Block += '</div>';
+
+        var gallery = $("#gallery-body");
+        if (i === 0){
+          $("#gallery-body").prepend(Block);
+          
+        }
+        else  {
+          $("#gallery-body #image:last").after(Block);
+        }
+        
+    });
+
+};*/
 
 $(document).on('click', 'a.button_to_translation', function(e){  
     //find parent div, make it hidden
