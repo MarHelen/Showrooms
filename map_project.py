@@ -61,17 +61,29 @@ def details(showroom_id):
 	collection = service.translations()
 
 	for post in posts_json[u'posts'][u'data']:
-		request = collection.list(q=post[u'message'], target=target_language)
-		response = request.execute()
-		item = {
-		'message'       : post[u'message'],
-		'message_trans' : (response['translations'][0])['translatedText'],
-		'link'          : post[u'link'].encode('utf-8'),
-		'id'            : post[u'id'].encode('utf-8'),
-		'full_picture'  : post[u'full_picture'].encode('utf-8'),
+		post_message_trans = ''
+		post_message = ''
+		post_picture = ''
+		print post
+		if u'message' in post:
+			post_message = post[u'message']
+			request = collection.list(q=post_message, target=target_language)
+			response = request.execute()
+			post_message_trans = (response['translations'][0])['translatedText']
+
+		if u'full_picture' in post:
+			post_picture = post[u'full_picture']
+
+		if u'link' in post:
+			item = {
+			'message'       : post_message,
+			'message_trans' : post_message_trans,
+			'link'          : post[u'link'].encode('utf-8'),
+			'id'            : post[u'id'].encode('utf-8'),
+			'full_picture'  : post_picture,
 		}
 
-		print (response['translations'][0])['translatedText']
+		print post_message_trans
 
 		di.append(item)
 
