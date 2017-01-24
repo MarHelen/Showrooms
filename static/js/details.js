@@ -14,13 +14,12 @@
 
 
 var message_len_limit = 100;
-/*
+
 $(document).ready (function(){
       
       
       for (i in po){
-           
-      //var post = po[i];
+          
       var post = po[i];
       post = JSON.parse(post);
 
@@ -34,23 +33,24 @@ $(document).ready (function(){
           if (post["message"].length > message_len_limit){
 
             Block += //original text
-                     '<div class="card-block" > <div class="to_translate"><p class="card-text">' + 
+                     '<div class="card-block" > <div class="to_translate invisible" ><p class="card-text">' + 
                       post["message"].slice(0,message_len_limit-1) +
-                     '<a href='+ post["link"] + ' target="_blank">...</a></p>' +
-                     '<p><a href="#" class="button_to_translatation small clickable">Show translation</a></p></div>' +
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p></div>' +
                      //translated text, hidden while composing
-                     '<div class="google_translate_en" style="display:none"> <p class="card-text"> <a href='+ post["link"] + ' target="_blank">...</a> </p>' +
-                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p> </div></div>';
+                     '<div class="google_translate_en visible" > <p class="card-text">' + 
+                     post["message_trans"].slice(0,message_len_limit-1) + 
+                     '<a href='+ post["link"] + ' target="_blank">...</a></p></div>' +
+                     '<p><a  href="#" class="translate small clickable">Show original</a></p></div>';
 
          }
           else {
 
             Block += //original text
-                     '<div class="card-block"> <div class="to_translate"><p class="card-text">' + post["message"] + 
-                     '</p><p><a href="#" class="button_to_translatation small clickable">Show translation</a><p></div>' +
+                     '<div class="card-block"> <div class="to_translate invisible"><p class="card-text">' + 
+                     post["message"] + '</p></div>' +
                      //translated text, hidden while composing
-                     '<div class="google_translate_en" style="display:none"><p class="card-text"></p>' + 
-                     '<p><a href="#"  class="button_to_original small clickable">Show original</a></p></div></div> ';
+                     '<div class="google_translate_en visible"  ><p class="card-text">' + post["message_trans"] + 
+                     '</p></div><p><a  href="#" class="translate small clickable">Show original</a></p></div> ';
 
               }
         }
@@ -67,32 +67,31 @@ $(document).ready (function(){
         }
 
     };
-
+    $("#loading_capture").fadeOut("slow");
 });
-*/
 
 
 
 
-$(document).on('click', '#button_to_translation', function(e){  
+$(document).on('click', 'a.translate', function(e){  
     //find parent div, make it hidden
-    $(this).closest("div").css('display', 'none');
-    //find translation block, make it visible
-    var next = $(this).closest("div").next('.google_translate_en');
-    $(next).css('display',null);
-    $(next).css('display', 'block');
+    var parent_div = $(this).closest("div");
+    var to_show = $(parent_div).find('div.invisible');
+    var to_hide = $(parent_div).find('div.visible');
+    $(to_show).removeClass('invisible');
+    $(to_show).addClass('visible');
+    $(to_show).show();
+    $(to_hide).removeClass('visible');
+    $(to_hide).addClass('invisible');
+    $(to_hide).hide();
+    
+    var new_text;
+    if ( $(to_hide).hasClass('to_translate') ){
+      new_text = "Show original";
+    }
+    else new_text = "Show translation";
+
+    $(this).text(new_text);
     return false;
   });
-
-$(document).on('click', 'a.button_to_original', function(e){  
-    //find parent div, make it hidden
-    $(this).closest("div").css('display', 'none');
-    //find original block, make it visible
-    var prev = $(this).closest("div").prev('.to_translate');
-    $(prev).css('display',null);
-    $(prev).css('display', 'block');
-    return false;
-  });
-
-
 
