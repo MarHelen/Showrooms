@@ -1,8 +1,9 @@
 from flask import Flask, render_template, jsonify, request
-import json
+
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, template_folder="templates")
+
 from sql_declarative import db, Showroom
 
 from apiclient.discovery import build
@@ -12,13 +13,8 @@ from flask_cache import Cache
 cache = Cache(app, config={'CACHE_TYPE': 'redis'})
 
 from config import FB_KEY, GOOGLE_KEY
-
-"""app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-  """     
-import facebook
+   
+import facebook, json
 
 graph = facebook.GraphAPI(access_token=FB_KEY, version="2.7")
 
@@ -45,57 +41,81 @@ def get_places(request="all"):
 	return jsonify(result=[i.serialize for i in showroom])
 
 
- #rendering a details page for called placeId 
-@app.route('/<showroom_id>')
-@cache.cached(timeout=86400) # 24 h
+"""
+ This is view function for details page
+ Here are collected all posts from Facebook API and serialized to list of jsons to pass them to the client side 
+"""
+@app.route("/<showroom_id>")
 def details(showroom_id):
-	#collecting recent posts from the page facebook
+
+	di = get_posts(showroom_id)
+
+	#search for showroom db record with specified id, choose the last
+	item = Showroom.query.filter(Showroom.placeId == showroom_id).first()
+
+	return render_template('details.html', place=item.serialize, posts=map(json.dumps, di) ) 
 
 
-	posts_json = graph.get_object(id='/'+showroom_id+'/', fields="posts.limit(12){message,link,full_picture}")
+@app.route("/about", methods=["GET"])
+def about_page():
+	return render_template('about.html' ) 
+
+"""
+In this function collected all posts from Facebook API response, got translations with get_translations()
+and created list of jsons with posts info
+The function cached to redis with Flask-Cache for 24h
+"""
+@cache.memoize(timeout=86400) # 24 h
+def get_posts(showroom):
+	#requesting facebook API for showroom posts with message, link, full_picture
+	posts = graph.get_object(id='/'+showroom+'/', fields="posts.limit(12){message,link,full_picture}")
 	di = []
 
-    #Google translation block
-	target_language = 'en'
-	service = build('translate','v2',developerKey=GOOGLE_KEY)
-	collection = service.translations()
+	#if request failed return empty dictionary
+	if u'error' in posts:
+	#need to add logging
+		return di
 
-	for post in posts_json[u'posts'][u'data']:
+	#if the key data is not empty, traverse all the posts inside
+	for post in posts[u'posts'][u'data']:
 		post_message_trans = ''
 		post_message = ''
 		post_picture = ''
-		print post
+
 		if u'message' in post:
 			post_message = post[u'message']
-			request = collection.list(q=post_message, target=target_language)
-			response = request.execute()
-			post_message_trans = (response['translations'][0])['translatedText']
+			post_message_trans = get_translation(post_message,'en')
+		
 
 		if u'full_picture' in post:
 			post_picture = post[u'full_picture']
-
+		#if there is no link in post, item is being skipped
 		if u'link' in post:
 			item = {
 			'message'       : post_message,
 			'message_trans' : post_message_trans,
-			'link'          : post[u'link'].encode('utf-8'),
-			'id'            : post[u'id'].encode('utf-8'),
+			'link'          : post[u'link'],
+			'id'            : post[u'id'],
 			'full_picture'  : post_picture,
 		}
 
-		print post_message_trans
-
 		di.append(item)
 
-	#search for showroom db record with specified id, choose the last
-	item = Showroom.query.filter(Showroom.placeId == showroom_id).first()
-	#calling for serialization method
-	#if item:
-	#	item = item.serialize
+	return di
 
 
-	return render_template('details.html', place=item.serialize, posts=map(json.dumps, di) ) 
+"""
+This method implements requesting to GOOGLE translate API to get English of Ukrainian and Russuian post messages
+"""
+def get_translation(message,target_language):
+	
+	service = build('translate','v2',developerKey=GOOGLE_KEY)
+	collection = service.translations()
+	request = collection.list(q=message, target=target_language)
+	response = request.execute()
+	post_message_trans = (response['translations'][0])['translatedText']
 
+	return post_message_trans
 
 if __name__ == "__main__":
 	db.create_all()

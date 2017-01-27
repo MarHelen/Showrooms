@@ -7,8 +7,6 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost:5432/showroom'
 
-
-
 from sqlalchemy import create_engine, Column, Integer, String
  
 from sqlalchemy.ext.declarative import declarative_base
@@ -24,9 +22,6 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
-
-
-#GoogleMaps(app)
 
 class Showroom(db.Model):
     __tablename__ = 'showrooms'

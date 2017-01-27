@@ -37,6 +37,7 @@
             {% if place.address %}
             <li class="nav-item" ><a href="#section2" class="nav-link">Location</a></li>
             {% endif %}
+            <li class="nav-item float-lg-right"><a href="/about" class="nav-link">About</a></li>
             <li class="nav-item float-lg-right"><a href="#footer" class="nav-link">Contacts</a></li>
           </ul>
       
@@ -50,7 +51,7 @@
     <div class="col-md-12 col-sm-12 col-lg-12" >
     
       <div class="col-md-5 col-sm-5 col-lg-5" style="max-height:650px; overflow-y: scroll;">
-        <img src="//graph.facebook.com/{{ place.placeId }}/picture?type=large" class="img-thumbnail img-fluid" 
+        <img href="http://graph.facebook.com/{{ place.placeId }}/picture?type=large" class="img-thumbnail img-fluid" 
         alt="place_picture" width="395" height="306">
        
       </div>

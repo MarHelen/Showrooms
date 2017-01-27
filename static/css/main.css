@@ -1,0 +1,41 @@
+html, body {
+        height: 100%;
+        margin: 20;
+        padding: 20;
+      }
+      #map {
+        border: 2px solid #fff;
+        margin-top: 20;
+        margin-bottom: : 20;
+        /*height: 100%;
+        width: 100%;
+        align-items: center;*/}
+      .clickable{
+        cursor: pointer;   
+      }
+
+      .panel-heading {
+        margin-top: -20px;
+        font-size: 15px;
+      }
+
+      #panel-header {
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+
+      .well {
+        opacity:0.85;
+        color: grey;
+        margin: right;
+      }
+      .table-borderless table tbody tr th td tfoot {
+        margin: 0;
+        padding: 0;
+        border: none;
+      }
+
+      .list-card {
+        margin-bottom: 0;
+      }
+      
